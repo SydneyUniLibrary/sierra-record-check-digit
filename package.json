@@ -1,0 +1,15 @@
+{
+  "name": "@sydneyunilibrary/sierra-record-check-digit",
+  "version": "1.0.0",
+  "description": "Calculates the check digit for a Sierra record number",
+  "license": "GPL-3.0",
+  "main": "index.js",
+  "repository": "SydneyUniLibrary/sierra-record-check-digit",
+  "devDependencies": {
+    "chai": "*",
+    "mocha": "*"
+  },
+  "scripts": {
+    "test": "mocha"
+  }
+}
