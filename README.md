@@ -44,9 +44,8 @@ calcCheckDigit('.i4105199') // => throws Error
 calcCheckDigit('i4105199@abcde') // => throws Error
 ``` 
 
-`calcCheckDigit` presumes the given record number does not have a the check digit. `calcCheckDigit` will give the wrong
-result if you give it a record number that does have a check digit then. If you're lucky it might throw an error, but
-don't count on it.
+`calcCheckDigit` presumes the given record number does not have a check digit. `calcCheckDigit` will give the wrong
+result if you give it a record number that does have a check digit.
 
 ### addCheckDigit
 
