@@ -48,6 +48,27 @@ const knownCheckDigits = [
   [ 1562237, 'x' ],
 ]
 
+const obviousRecordNumbersWithCheckDigits = [
+  'b33846327',
+  'b47116523@mdill',
+  'o100007x',
+  'b1125421x',
+]
+
+const obviousInvalidRecordNumbers = [
+  null,
+  {},
+  '#b33846327',
+  'b',
+  '.b',
+  'b12345',
+  'b4711652@',
+  'b4711652@toolong',
+  '.b12345',
+  '.b4711652@',
+  '.b4711652@toolong',
+]
+
 
 describe('calcCheckDigit', function () {
   for (const [ recordNum, expectedCheckDigit ] of knownCheckDigits) {
@@ -58,4 +79,115 @@ describe('calcCheckDigit', function () {
       expect(calcCheckDigit(String(recordNum))).to.equal(expectedCheckDigit)
     })
   }
+})
+
+
+describe('addCheckDigit', function () {
+
+  describe('record number as a number', function () {
+    for (const [ recordNum, expectedCheckDigit ] of knownCheckDigits) {
+      const input = Number(recordNum)
+      const expectedOutput = `${recordNum}${expectedCheckDigit}`
+      it(`given ${input}, it returns '${expectedOutput}'`, function () {
+        expect(addCheckDigit(input)).to.equal(expectedOutput)
+      })
+    }
+  })
+
+  describe('record number as a string', function () {
+    for (const [ recordNum, expectedCheckDigit ] of knownCheckDigits) {
+      const input = String(recordNum)
+      const expectedOutput = `${recordNum}${expectedCheckDigit}`
+      it(`given '${input}', it returns '${expectedOutput}'`, function () {
+        expect(addCheckDigit(input)).to.equal(expectedOutput)
+      })
+    }
+  })
+
+  describe('record number with a type char', function () {
+    for (const [ recordNum, expectedCheckDigit ] of knownCheckDigits) {
+      const input = `b${recordNum}`
+      const expectedOutput = `b${recordNum}${expectedCheckDigit}`
+      it(`given '${input}', it returns '${expectedOutput}'`, function () {
+        expect(addCheckDigit(input)).to.equal(expectedOutput)
+      })
+    }
+  })
+
+  describe('record number with a type char and initial period', function () {
+    for (const [ recordNum, expectedCheckDigit ] of knownCheckDigits) {
+      const input = `.i${recordNum}`
+      const expectedOutput = `.i${recordNum}${expectedCheckDigit}`
+      it(`given '${input}', it returns '${expectedOutput}'`, function () {
+        expect(addCheckDigit(input)).to.equal(expectedOutput)
+      })
+    }
+  })
+
+  describe("doesn't add to virtual records by default", function () {
+    for (const [ recordNum ] of knownCheckDigits) {
+      const input = `p${recordNum}@abcde`
+      const expectedOutput = `p${recordNum}@abcde`
+      it(`given '${input}', it returns '${expectedOutput}'`, function () {
+        expect(addCheckDigit(input)).to.equal(expectedOutput)
+      })
+    }
+    for (const [ recordNum ] of knownCheckDigits) {
+      const input = `.p${recordNum}@abcde`
+      const expectedOutput = `.p${recordNum}@abcde`
+      it(`given '${input}', it returns '${expectedOutput}'`, function () {
+        expect(addCheckDigit(input)).to.equal(expectedOutput)
+      })
+    }
+  })
+
+  describe("doesn't add to virtual records if explicitly told not to", function () {
+    for (const [ recordNum ] of knownCheckDigits) {
+      const input = `p${recordNum}@abcde`
+      const expectedOutput = `p${recordNum}@abcde`
+      it(`given '${input}', it returns '${expectedOutput}'`, function () {
+        expect(addCheckDigit(input, { addToVirtualRecords: false })).to.equal(expectedOutput)
+      })
+    }
+    for (const [ recordNum ] of knownCheckDigits) {
+      const input = `.p${recordNum}@abcde`
+      const expectedOutput = `.p${recordNum}@abcde`
+      it(`given '${input}', it returns '${expectedOutput}'`, function () {
+        expect(addCheckDigit(input, { addToVirtualRecords: false })).to.equal(expectedOutput)
+      })
+    }
+  })
+
+  describe('adds to virtual records when told to', function () {
+    for (const [ recordNum, expectedCheckDigit ] of knownCheckDigits) {
+      const input = `p${recordNum}@abcde`
+      const expectedOutput = `p${recordNum}${expectedCheckDigit}@abcde`
+      it(`given '${input}', it returns '${expectedOutput}'`, function () {
+        expect(addCheckDigit(input, { addToVirtualRecords: true })).to.equal(expectedOutput)
+      })
+    }
+    for (const [ recordNum, expectedCheckDigit ] of knownCheckDigits) {
+      const input = `.p${recordNum}@abcde`
+      const expectedOutput = `.p${recordNum}${expectedCheckDigit}@abcde`
+      it(`given '${input}', it returns '${expectedOutput}'`, function () {
+        expect(addCheckDigit(input, { addToVirtualRecords: true })).to.equal(expectedOutput)
+      })
+    }
+  })
+
+  describe('invalid input', function () {
+    for (const input of obviousRecordNumbersWithCheckDigits) {
+      it(`given '${input}', it throws an error`, function () {
+        function callingAddCheckDigit() { addCheckDigit(input) }
+        expect(callingAddCheckDigit).to.throw(/already has a check digit/i)
+      })
+    }
+    for (const input of obviousInvalidRecordNumbers) {
+      it(`given '${input}', it throws an error`, function () {
+        function callingAddCheckDigit() { addCheckDigit(input) }
+        expect(callingAddCheckDigit).to.throw(/record number is invalid/i)
+      })
+    }
+  })
+
 })

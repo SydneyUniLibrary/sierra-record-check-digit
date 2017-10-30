@@ -28,11 +28,31 @@ function calcCheckDigit(recordNumber) {
     x += a * m
     m += 1
   }
-  let r = x % 11
+  const r = x % 11
   return r === 10 ? 'x' : String(r)
 }
 
 
+function addCheckDigit(recordNumber, { addToVirtualRecords = false } = {}) {
+  let numberPart, fore, aft
+  if (typeof recordNumber === 'number') {
+    numberPart = recordNumber
+  } else {
+    let match = /^(\.?[a-z]?)(\d{6,7})(@\w{1,5})?$/i.exec(recordNumber)
+    if (match) {
+      fore = match[1]
+      numberPart = match[2]
+      aft = match[3]
+    } else {
+      throw new Error(`Record number is invalid or already has a check digit: ${recordNumber}`)
+    }
+  }
+  const checkDigit = !aft || addToVirtualRecords ? calcCheckDigit(numberPart) : undefined
+  return [ fore, numberPart, checkDigit, aft ].join('')
+}
+
+
 module.exports = {
-  calcCheckDigit
+  calcCheckDigit,
+  addCheckDigit,
 }
