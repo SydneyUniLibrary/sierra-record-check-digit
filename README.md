@@ -16,12 +16,12 @@ npm install 'SydneyUniLibrary/sierra-record-check-digit#v1.0'
 
 In NodeJS v8+:
 ```js
-const { addCheckDigit, calcCheckDigit } = require('@SydneyUniLibrary/sierra-record-check-digit')
+const { addCheckDigit, calcCheckDigit } = require('@sydneyunilibrary/sierra-record-check-digit')
 ```
 
 In ECMAScript 2015+:
 ```js
-import { addCheckDigit, calcCheckDigit } from '@SydneyUniLibrary/sierra-record-check-digit'
+import { addCheckDigit, calcCheckDigit } from '@sydneyunilibrary/sierra-record-check-digit'
 ```
 
 ### calcCheckDigit
