@@ -33,7 +33,7 @@ function calcCheckDigit(recordNumber) {
 }
 
 
-function addCheckDigit(recordNumber, { addToVirtualRecords = false } = {}) {
+function addCheckDigit(recordNumber, { addToVirtualRecords = false, checkDigit = undefined } = {}) {
   let numberPart, fore, aft
   if (typeof recordNumber === 'number') {
     numberPart = recordNumber
@@ -47,8 +47,12 @@ function addCheckDigit(recordNumber, { addToVirtualRecords = false } = {}) {
       throw new Error(`Record number is invalid or already has a check digit: ${recordNumber}`)
     }
   }
-  const checkDigit = !aft || addToVirtualRecords ? calcCheckDigit(numberPart) : undefined
-  return [ fore, numberPart, checkDigit, aft ].join('')
+  const chkDgt = (
+    !aft || addToVirtualRecords
+    ? (checkDigit || calcCheckDigit(numberPart))
+    : undefined
+  )
+  return [ fore, numberPart, chkDgt, aft ].join('')
 }
 
 

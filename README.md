@@ -60,7 +60,18 @@ addCheckDigit('i3384632') // => 'i33846327'
 addCheckDigit('.i3384632') // => '.i33846327'
 ````
 
-`addCheckDigit` will not add a check digit to a virtual record number by default. This mirrors Sierra's own behaviour.
+You can explicitly give `addCheckDigit` a check digit to add. You can do this if you want to add the palceholder check
+digit `a`, or if you already know the check digit want to save `addCheckDigit` for having to calculate it.
+`addCheckDigit` will not validate the check digit you give it in any way.  
+
+```js
+addCheckDigit('3384632', { checkDigit: 'a' }) // => '3384632a'
+addCheckDigit('i3384632', { checkDigit: '7' }) // => 'i33846327'
+addCheckDigit('i3384632', { checkDigit: '!' }) // => 'i3384632!'
+```
+
+addCheckDigit will not add a check digit to a virtual record number by default, even if you explicitly give it a check
+digit to add. This mirrors Sierra's own behaviour.
 
 ```js
 addCheckDigit('i3384632@abcd') // => 'i3384632@abcd'

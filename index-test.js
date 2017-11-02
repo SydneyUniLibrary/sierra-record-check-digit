@@ -190,4 +190,14 @@ describe('addCheckDigit', function () {
     }
   })
 
+  describe('uses the given check digit', function () {
+    for (const [ recordNum ] of knownCheckDigits) {
+      const input = Number(recordNum)
+      const expectedOutput = `${recordNum}a`
+      it(`given ${input}, it returns '${expectedOutput}'`, function () {
+        expect(addCheckDigit(input, { checkDigit: 'a' })).to.equal(expectedOutput)
+      })
+    }
+  })
+
 })
