@@ -7,7 +7,7 @@ Calculates the check digit for a Sierra record number.
 ## Install
 
 ```
-npm install 'SydneyUniLibrary/sierra-record-check-digit#v1.0'
+npm install '@sydneyunilibrary/sierra-record-check-digit'
 ```
 
 
